@@ -1,6 +1,13 @@
 import random
 
+'''I have did everything in 0-base indexing
+but for block size of 64 i copied the permutation 
+from book so they are in 1-base so i update them 
+in zero base indexing'''
+
 def generate_permutation(n:int):
+    '''It generate the initial permutation 
+    n denotes here block size'''
     if n == 64:
         perm = [ 58, 50, 42, 34, 26, 18, 10, 2, 
                60, 52, 44, 36, 28, 20, 12, 4, 
@@ -10,7 +17,7 @@ def generate_permutation(n:int):
                59, 51, 43, 35, 27, 19, 11, 3, 
                61, 53, 45, 37, 29, 21, 13, 5, 
                63, 55, 47, 39, 31, 23, 15, 7 ]
-        upd(perm)
+        upd(perm)##converting in 0-base index
         return perm
 
     perm = [x for x in range(n)]
@@ -18,6 +25,8 @@ def generate_permutation(n:int):
     return perm
 
 def generate_half_permutation(n:int):
+    '''It generate the permutation  here n
+    denotes half width of block size'''
     if n == 32:
         perm = [ 16, 7, 20, 21, 
                  29, 12, 28, 17, 
@@ -27,7 +36,7 @@ def generate_half_permutation(n:int):
                  32, 27, 3, 9, 
                  19, 13, 30, 6, 
                  22, 11, 4, 25 ]
-        upd(perm)
+        upd(perm)##converting in 0-base index
         return perm
 
     perm = [x for x in range(n)]
@@ -35,6 +44,7 @@ def generate_half_permutation(n:int):
     return perm
 
 def generate_inv_permutation(n:int, perm):
+    '''It generate the inverse of initial permutation''' 
     if n == 64:
         inv_perm = [ 40, 8, 48, 16, 56, 24, 64, 32, 
              39, 7, 47, 15, 55, 23, 63, 31, 
@@ -44,7 +54,7 @@ def generate_inv_permutation(n:int, perm):
              35, 3, 43, 11, 51, 19, 59, 27, 
              34, 2, 42, 10, 50, 18, 58, 26, 
              33, 1, 41, 9, 49, 17, 57, 25 ]
-        upd(inv_perm)
+        upd(inv_perm)##converting in 0-base index
         return inv_perm
 
     inv_perm = [x for x in range(n)]
@@ -55,6 +65,8 @@ def generate_inv_permutation(n:int, perm):
 def generate_expansion_permutation(n:int, m:int): 
     ## n denotes expansion permutation length
     ## m denotes half of blocksize
+    '''It genereate the expansion permutation 
+    which required in for expansion of the hlaf of the message''' 
     if m == 32:
         exp_perm = [ 32, 1, 2, 3, 4, 5,
              4, 5, 6, 7, 8, 9, 
@@ -64,7 +76,7 @@ def generate_expansion_permutation(n:int, m:int):
              20, 21, 22, 23, 24, 25,
              24, 25, 26, 27, 28, 29,
              28, 29, 30, 31, 32, 1 ] 
-        upd(exp_perm)
+        upd(exp_perm)##converting in 0-base index
         return exp_perm
 
     exp_perm = [0]*n
@@ -76,6 +88,9 @@ def generate_expansion_permutation(n:int, m:int):
     return exp_perm
 
 def generate_pc1_permutation(n):
+    ''' It generates the PC1 which is known 
+    as permutated choice one is required for 
+    key generation'''
     if n == 64:
         PC1 = [ 57, 49, 41, 33, 25, 17, 9, 
              1, 58, 50, 42, 34, 26, 18, 
@@ -85,7 +100,7 @@ def generate_pc1_permutation(n):
              7, 62, 54, 46, 38, 30, 22, 
              14, 6, 61, 53, 45, 37, 29, 
              21, 13, 5, 28, 20, 12, 4 ]
-        upd(PC1)
+        upd(PC1)##converting in 0-base index
         return PC1
     x = [i for i in range(n)]
     random.shuffle(x)
@@ -96,6 +111,9 @@ def generate_pc1_permutation(n):
     return perm
 
 def generate_pc2_permutation(n):
+    ''' It generates the PC1 which is known 
+    as permutated choice one is required for 
+    key generation'''
     if n == 56:
         PC2 = [ 14, 17, 11, 24, 1, 5, 
              3, 28, 15, 6, 21, 10, 
@@ -117,19 +135,28 @@ def generate_pc2_permutation(n):
     return perm
 
 def upd(perm):
+    '''I did everything with 0-base indexing 
+    but for 64 block size i copied all the permutation from 
+    book which is 1-base indexing so need to decreas by one
+    so it take a permutation decrease there value'''
     for i in range(len(perm)):
         perm[i] -= 1
 
 def permutaion(msg:str, perm):
+    '''It permuates the given string with help of given of permutation 
+    and return permutated string, returned string size depend 
+    on the size of given permutation '''  
     per_msg = []
     for i in range(len(perm)):
         per_msg.append(msg[perm[i]])
     return "".join(per_msg)
 
 def leftshift(msg, k):
+    '''it just to left shift with given k'''
     return msg[k:] + msg[:k]
 
 def xor(msg1, msg2):
+    '''it just return xor two binary message'''
     x = []
     for i in range(len(msg1)):
         if msg1[i] == msg2[i]:
@@ -138,6 +165,7 @@ def xor(msg1, msg2):
     return "".join(x)
 
 def S_box(msg, s):
+    '''Compressed the message with the help of s box''' 
     new_msg = []
     num = 0
     assert len(msg)%6 == 0, print("length of message must be divisible by 6")
@@ -151,35 +179,47 @@ def S_box(msg, s):
 
     return "".join(new_msg)
 
-def mutate(txt: str, hamming_dist: int) -> str:
-  length = len(txt)
-  random_pos = random.sample(range(0,length),hamming_dist)
-  random_pos.sort() # To ensure the for loop below doesnot increase the length of txt
-  mutated_txt = ""
-  i = 0
-  for pos in random_pos:
-    mutated_txt += txt[i:pos]
-    i = pos+1
-    if(txt[pos] == '1'):
-      mutated_txt += '0'
-    else:
-      mutated_txt += '1'
+def diff_bit(txt: str, hamming_dist: int) -> str:
+    '''takes one binary string and return a string such that 
+    the hamming distance between returned string and given string is hamming_dist'''
+    ## getting the length of txt.
+    length = len(txt) 
+    
+    ## slecting "hamming dist" numbers from 0 to length-1 randomly.
+    random_pos = random.sample(range(0,length),hamming_dist) 
+    
+    random_pos.sort() ## just sort position in increasing order
+    diff_txt = "" ## for storing the changed txt.
+    i = 0
+    for pos in random_pos:
+        ## copying the text which we don't need to change
+        diff_txt += txt[i:pos] 
+        i = pos+1
+        if(txt[pos] == '1'):
+            diff_txt += '0'
+        else:
+            diff_txt += '1'
   
-  mutated_txt += txt[i:]
-  return mutated_txt
+    diff_txt += txt[i:]
+    return diff_txt
 
 def preprocess_key(key: str, halfwidth:int =32, hamming_dist:int =0) -> str:
- 
-  if(len(key) > 2*halfwidth):
-    key = key[:2*halfwidth]
-  key = key.zfill(2*halfwidth)
+    ''' It preprocess the key so that size key become
+    size of block cipher if the key size is greater 
+    remove then have ignored last unused value and if size is smaller
+    then added zero in starting'''
+    if(len(key) > 2*halfwidth):
+        key = key[:2*halfwidth]
+    key = key.zfill(2*halfwidth)
 
-  if(hamming_dist != 0):
-    key = mutate(key,hamming_dist)
+    if(hamming_dist != 0):
+        key = diff_bit(key,hamming_dist)
 
-  return key
+    return key
 
 def Weak_key_demonstration(key, num_rounds, block_size):
+    ''' this return a list of keys after every round
+    in key generation '''
     PC1 = generate_pc1_permutation(block_size)
     PC2 = generate_pc2_permutation(len(PC1))
     key = permutaion(key, PC1)
@@ -195,7 +235,7 @@ def Weak_key_demonstration(key, num_rounds, block_size):
     return keys
 
 def encrypt(msg, perm, inv_perm, exp_perm, key, PC1, PC2, half_perm, s_boxes, num_rounds):
-
+    ''' does encyption as DES algorithm work'''
     half = len(half_perm)
 
     msg = permutaion(msg, perm)
@@ -231,12 +271,14 @@ def encrypt(msg, perm, inv_perm, exp_perm, key, PC1, PC2, half_perm, s_boxes, nu
 
 
 def txt_bin(s:str):
+    '''It convert message to binary form'''
     bin_msg = []
     for c in s:
         bin_msg.append(str(bin(ord(c)))[2:].rjust(8, '0'))
     return "".join(bin_msg)
 
 def bin_txt(msg):
+    '''It conver binary string to normal message'''
     enc_msg = []
     for i in range(0, len(msg), 8):
         ascii_val = int(msg[i:i+8], 2)
@@ -244,17 +286,19 @@ def bin_txt(msg):
         enc_msg.append(ch)
     return "".join(enc_msg)
 
-def one_bit_diff(msg):
-    bin_msg = txt_bin(msg)
-    bin_msg = list(bin_msg)
-    if bin_msg[0] == '0':
-        bin_msg[0] = '1'
-    else: bin_msg[0] = '0'
-    bin_msg = "".join(bin_msg)
-    return bin_txt(bin_msg)
-
 def preprocess(s, half, block_size, num_rounds, key):
-
+    '''It took the plaintext, block size, number of rounds
+    and the key and returned the encrypted message
+    How I did?
+    Ans: first have converted the given string into binary from 
+    and then make sure that size of message in binary form is 
+    multiple of block size if not added some zero in front.
+    then make 8 s box and stored in s_boxes if more s boxes needed then 
+    I took in circular form mean after 8th box took 1 box
+    then store initial permutataion(perm), final permutation(inv_permutation)
+    PC1, PC2, expansion permutation(exp_perm), and half permutation
+    After that have broke the message of length block size for each message of block size 
+    called an encrypted function which encrypt the given the message'''
     bin_msg = txt_bin(s)
     mul = (len(bin_msg)+block_size-1)//block_size*block_size
     bin_msg = bin_msg.rjust(mul, '0')
@@ -326,6 +370,8 @@ def preprocess(s, half, block_size, num_rounds, key):
     return enc_msg
 
 def bin_hex(msg):
+    '''It takes a string in binary form and convert 
+    it into hexa decimal form'''
     hex = []
     for i in range(0, len(msg), 8):
         ascii_val = int(msg[i:i+8], 2)
@@ -333,14 +379,15 @@ def bin_hex(msg):
     return "".join(hex)
 
 def init(msg, block_size, num_rounds, key):
+    '''It just for calculating the half size of block
+    and return the encrypted message'''
     print(msg, block_size, num_rounds)
     half = block_size//2
-    enc_msg = preprocess(msg, half, block_size, num_rounds, key)
-    # for i in range(num_rounds):
-    #     enc_msg[i] = bin_hex(enc_msg[i])
-    return enc_msg
+    return preprocess(msg, half, block_size, num_rounds, key)
+    
 
 if __name__ == "__main__":
+    '''no use in the project just for checking'''
     half = 32
     block_size = half*2
     num_rounds = 16

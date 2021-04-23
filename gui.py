@@ -1,12 +1,13 @@
 from tkinter import *
 from tkinter.ttk import *
-from des import init, one_bit_diff, preprocess_key, Weak_key_demonstration
+from des import init, diff_bit, preprocess_key, Weak_key_demonstration
 from matplotlib.figure import Figure
 
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, 
 NavigationToolbar2Tk)
 
 class Combo:
+    '''just for create combox from tkinter'''
     def __init__(self, root, values, col):
         self.combo = Combobox(root)
         self.combo['values'] = values
@@ -18,6 +19,7 @@ class Combo:
         return self.combo.get()
 
 def do_enc(event):
+    '''this function call the function for encryption'''
     try:
         if not len(dec.get()) or not len(user_key.get()):
             enc_var.set("")
@@ -30,6 +32,7 @@ def do_enc(event):
         enc_var.set("")
 
 def draw_graph(diff, labels, label):
+    ''' this is for draw the graph'''
     root1 = Toplevel()
     L = Label(root1, text=label)
     L.pack()
@@ -55,13 +58,14 @@ def draw_graph(diff, labels, label):
 
 
 def Avalanche_effect_with_ciphertext():
+    ''' Function name self explaionatory'''
     try:
         if not len(dec.get()) or not len(user_key.get()):
             enc_var.set("")
             return
         key = preprocess_key(hex_bin(user_key.get()), int(block_size.get())//2)
         enc_msg1 = init(dec.get(), int(block_size.get()), int(num_rounds.get()), key)
-        enc_msg2 = init(one_bit_diff(dec.get()), int(block_size.get()), int(num_rounds.get()), key)
+        enc_msg2 = init(diff_bit(dec.get(), 1), int(block_size.get()), int(num_rounds.get()), key)
         diff = [0]*(int(num_rounds.get())+1)
         diff[0] = 1
         
